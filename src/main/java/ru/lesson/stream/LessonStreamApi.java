@@ -56,10 +56,10 @@ public class LessonStreamApi {
      */
     public List<Employee> task4(List<List<Employee>> employeeDepartments) {
         var employeeByrating = employeeDepartments.stream()
-                                                                .flatMap(List::stream)
-                                                                .distinct()
-                                                                .sorted((e1, e2) -> (e2.getRating() - e1.getRating()))
-                                                                .collect(Collectors.toList());
+                                                            .flatMap(List::stream)
+                                                            .distinct()
+                                                            .sorted((e1, e2) -> (e2.getRating() - e1.getRating()))
+                                                            .collect(Collectors.toList());
         return employeeByrating;
     }
 
