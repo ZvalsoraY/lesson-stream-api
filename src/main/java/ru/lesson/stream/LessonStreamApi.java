@@ -17,11 +17,10 @@ public class LessonStreamApi {
      * Важно: Необходимо учесть, что List<Employee> employees может содержать дублирующие записи.
      */
     public List<Employee> task1(List<Employee> employees) {
-        var result = employees.parallelStream()
-                                            .distinct()
-                                            .filter(employee -> employee.getRating() > 50)
-                                            .collect(Collectors.toList());
-        return result;
+        return employees.parallelStream()
+                .distinct()
+                .filter(employee -> employee.getRating() > 50)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -30,12 +29,11 @@ public class LessonStreamApi {
      * У которых рейтинг {@link Employee#getRating()} меньше 50.
      */
     public List<String> task2(List<Employee> employees) {
-        var result = employees.parallelStream()
-                                        .distinct()
-                                        .filter(employee -> employee.getRating() < 50)
-                                        .map(employee -> employee.getName() + "=" + employee.getRating())
-                                        .collect(Collectors.toList());
-        return result;
+        return employees.parallelStream()
+                .distinct()
+                .filter(employee -> employee.getRating() < 50)
+                .map(employee -> employee.getName() + "=" + employee.getRating())
+                .collect(Collectors.toList());
     }
 
     /**
@@ -43,8 +41,7 @@ public class LessonStreamApi {
      * Получить средний рейтнг всех сотрудников.
      */
     public double task3(List<Employee> employees) {
-        var middleRate = employees.stream().mapToDouble(Employee::getRating).average().getAsDouble();
-        return middleRate;
+        return employees.stream().mapToDouble(Employee::getRating).average().getAsDouble();
     }
 
     /**
@@ -55,12 +52,11 @@ public class LessonStreamApi {
      * Необходимо устранить дублирование.
      */
     public List<Employee> task4(List<List<Employee>> employeeDepartments) {
-        var employeeByrating = employeeDepartments.stream()
-                                                            .flatMap(List::stream)
-                                                            .distinct()
-                                                            .sorted((e1, e2) -> (e2.getRating() - e1.getRating()))
-                                                            .collect(Collectors.toList());
-        return employeeByrating;
+        return employeeDepartments.stream()
+                .flatMap(List::stream)
+                .distinct()
+                .sorted((e1, e2) -> (e2.getRating() - e1.getRating()))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -79,11 +75,10 @@ public class LessonStreamApi {
         if (number <= 0) {
             throw new IllegalArgumentException(Integer.toString(number));
         }
-        var employeeFiltered = employees.stream()
-                                                    .filter(employee -> employee.getId() > (number - 1) * size)
-                                                    .limit(size)
-                                                    .collect(Collectors.toList());
-        return employeeFiltered;
+        return employees.stream()
+                .filter(employee -> employee.getId() > (number - 1) * size)
+                .limit(size)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -94,8 +89,7 @@ public class LessonStreamApi {
      * Пример результата: [Ivan, Olga, John]
      */
     public String task6(List<Employee> employees) {
-        var names =employees.stream().map(employee -> employee.getName()).collect(Collectors.joining(", ","[","]"));
-        return names;
+        return employees.stream().map(employee -> employee.getName()).collect(Collectors.joining(", ","[","]"));
     }
 
     /**
@@ -114,10 +108,9 @@ public class LessonStreamApi {
      * должности сотрудника {@link Employee#getPositionType()}
      */
     public Map<PositionType, Double> task8(List<Employee> employees) {
-        var result = employees.stream()
-                                                .collect(Collectors.groupingBy(Employee::getPositionType
-                                                ,Collectors.averagingDouble(Employee::getRating)));
-        return result;
+        return employees.stream()
+                .collect(Collectors.groupingBy(Employee::getPositionType
+                ,Collectors.averagingDouble(Employee::getRating)));
     }
 
     /**
@@ -128,10 +121,9 @@ public class LessonStreamApi {
      * Сотрудник является эффективным, если его рейтинг больше 50.
      */
     public Map<Boolean, Long> task9(List<Employee> employees) {
-        var result = employees.stream()
-                                                .collect(Collectors.partitioningBy(employee -> employee.getRating() > 50
-                                                , Collectors.counting()));
-        return result;
+        return employees.stream()
+                .collect(Collectors.partitioningBy(employee -> employee.getRating() > 50
+                , Collectors.counting()));
     }
 
     /**
@@ -143,8 +135,8 @@ public class LessonStreamApi {
      */
     public Map<Boolean, String> task10(List<Employee> employees) {
         return employees.stream()
-                        .collect(Collectors.partitioningBy(employee -> employee.getRating() > 50
-                        , Collectors.mapping(Employee::getName, Collectors.joining(", "))));
+                .collect(Collectors.partitioningBy(employee -> employee.getRating() > 50
+                , Collectors.mapping(Employee::getName, Collectors.joining(", "))));
     }
 
 }
