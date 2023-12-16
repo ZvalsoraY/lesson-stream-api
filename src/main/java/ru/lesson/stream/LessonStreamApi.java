@@ -80,8 +80,9 @@ public class LessonStreamApi {
             throw new IllegalArgumentException(Integer.toString(number));
         }
         var employeeFiltered = employees.stream()
-                                                        .filter(employee -> employee.getId() > (number - 1) * size)
-                                                        .limit(size).collect(Collectors.toList());
+                                                    .filter(employee -> employee.getId() > (number - 1) * size)
+                                                    .limit(size)
+                                                    .collect(Collectors.toList());
         return employeeFiltered;
     }
 
@@ -114,8 +115,8 @@ public class LessonStreamApi {
      */
     public Map<PositionType, Double> task8(List<Employee> employees) {
         var result = employees.stream()
-                                                    .collect(Collectors.groupingBy(Employee::getPositionType
-                                                            ,Collectors.averagingDouble(Employee::getRating)));
+                                                .collect(Collectors.groupingBy(Employee::getPositionType
+                                                ,Collectors.averagingDouble(Employee::getRating)));
         return result;
     }
 
@@ -129,7 +130,7 @@ public class LessonStreamApi {
     public Map<Boolean, Long> task9(List<Employee> employees) {
         var result = employees.stream()
                                                 .collect(Collectors.partitioningBy(employee -> employee.getRating() > 50
-                                                        , Collectors.counting()));
+                                                , Collectors.counting()));
         return result;
     }
 
@@ -143,7 +144,7 @@ public class LessonStreamApi {
     public Map<Boolean, String> task10(List<Employee> employees) {
         return employees.stream()
                         .collect(Collectors.partitioningBy(employee -> employee.getRating() > 50
-                                , Collectors.mapping(Employee::getName, Collectors.joining(", "))));
+                        , Collectors.mapping(Employee::getName, Collectors.joining(", "))));
     }
 
 }
