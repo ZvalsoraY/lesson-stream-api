@@ -3,8 +3,11 @@ package ru.lesson.stream;
 import ru.lesson.stream.dto.Employee;
 import ru.lesson.stream.dto.PositionType;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class LessonStreamApi {
 
@@ -14,7 +17,11 @@ public class LessonStreamApi {
      * Важно: Необходимо учесть, что List<Employee> employees может содержать дублирующие записи.
      */
     public List<Employee> task1(List<Employee> employees) {
-        return null;
+        var result = employees.parallelStream()
+                                            .distinct()
+                                            .filter(employee -> employee.getRating() > 50)
+                                            .collect(Collectors.toList());
+        return result;
     }
 
     /**
@@ -23,7 +30,12 @@ public class LessonStreamApi {
      * У которых рейтинг {@link Employee#getRating()} меньше 50.
      */
     public List<String> task2(List<Employee> employees) {
-        return null;
+        var result = employees.parallelStream()
+                                        .distinct()
+                                        .filter(employee -> employee.getRating() < 50)
+                                        .map(employee -> employee.getName() + "=" + employee.getRating())
+                                        .collect(Collectors.toList());
+        return result;
     }
 
     /**
@@ -31,7 +43,8 @@ public class LessonStreamApi {
      * Получить средний рейтнг всех сотрудников.
      */
     public double task3(List<Employee> employees) {
-        return 0.0;
+        var middleRate = employees.stream().mapToDouble(Employee::getRating).average().getAsDouble();
+        return middleRate;
     }
 
     /**
@@ -42,7 +55,12 @@ public class LessonStreamApi {
      * Необходимо устранить дублирование.
      */
     public List<Employee> task4(List<List<Employee>> employeeDepartments) {
-        return null;
+        var employeeByrating = employeeDepartments.stream()
+                                                                .flatMap(List::stream)
+                                                                .distinct()
+                                                                .sorted((e1, e2) -> (e2.getRating() - e1.getRating()))
+                                                                .collect(Collectors.toList());
+        return employeeByrating;
     }
 
     /**
@@ -61,7 +79,10 @@ public class LessonStreamApi {
         if (number <= 0) {
             throw new IllegalArgumentException(Integer.toString(number));
         }
-        return null;
+        var employeeFiltered = employees.stream()
+                                                        .filter(employee -> employee.getId() > (number - 1) * size)
+                                                        .limit(size).collect(Collectors.toList());
+        return employeeFiltered;
     }
 
     /**
@@ -72,7 +93,8 @@ public class LessonStreamApi {
      * Пример результата: [Ivan, Olga, John]
      */
     public String task6(List<Employee> employees) {
-        return null;
+        var names =employees.stream().map(employee -> employee.getName()).collect(Collectors.joining(", ","[","]"));
+        return names;
     }
 
     /**
@@ -82,7 +104,7 @@ public class LessonStreamApi {
      * Если дубли существуют - вернуть true, если дублей нет - вернуть false
      */
     public boolean task7(List<Employee> employees) {
-        return false;
+        return employees.stream().allMatch(new HashSet<>()::add);
     }
 
     /**
@@ -91,7 +113,10 @@ public class LessonStreamApi {
      * должности сотрудника {@link Employee#getPositionType()}
      */
     public Map<PositionType, Double> task8(List<Employee> employees) {
-        return null;
+        var result = employees.stream()
+                                                    .collect(Collectors.groupingBy(Employee::getPositionType
+                                                            ,Collectors.averagingDouble(Employee::getRating)));
+        return result;
     }
 
     /**
@@ -102,7 +127,10 @@ public class LessonStreamApi {
      * Сотрудник является эффективным, если его рейтинг больше 50.
      */
     public Map<Boolean, Long> task9(List<Employee> employees) {
-        return null;
+        var result = employees.stream()
+                                                .collect(Collectors.partitioningBy(employee -> employee.getRating() > 50
+                                                        , Collectors.counting()));
+        return result;
     }
 
     /**
@@ -113,7 +141,9 @@ public class LessonStreamApi {
      * Сотрудник является эффективным, если его рейтинг больше 50.
      */
     public Map<Boolean, String> task10(List<Employee> employees) {
-        return null;
+        return employees.stream()
+                        .collect(Collectors.partitioningBy(employee -> employee.getRating() > 50
+                                , Collectors.mapping(Employee::getName, Collectors.joining(", "))));
     }
 
 }
